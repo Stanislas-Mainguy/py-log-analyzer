@@ -13,23 +13,31 @@ def load_logs(filepath):
     return lines
 
 def analyze_logs(log_lines):
-    """Count occurrences of each log level and display a summary."""
-    log_counts = {
-        "INFO": 0,
-        "WARNING": 0,
-        "ERROR": 0,
-        "DEBUG": 0,
-        "CRITICAL": 0
+    """Analyze HTTP status codes in the log lines and display a summary."""
+    
+    status_counts = {
+        "2xx": {"count": 0, "label": "Success"},
+        "3xx": {"count": 0, "label": "Redirection"},
+        "4xx": {"count": 0, "label": "Client Error"},
+        "5xx": {"count": 0, "label": "Server Error"}
     }
 
     for line in log_lines:
-        for level in log_counts:
-            if level in line:
-                log_counts[level] += 1
+        parts = line.split()
+        if len(parts) > 8:
+            status_code = parts[8]
+            if status_code.startswith("2"):
+                status_counts["2xx"]["count"] += 1
+            elif status_code.startswith("3"):
+                status_counts["3xx"]["count"] += 1
+            elif status_code.startswith("4"):
+                status_counts["4xx"]["count"] += 1
+            elif status_code.startswith("5"):
+                status_counts["5xx"]["count"] += 1
 
-    print("\n📊 Résumé des logs par niveau :\n")
-    for level, count in log_counts.items():
-        print(f"{level:<10} : {count}")
+    print("\n📊 HTTP Status Summary:\n")
+    for group, data in status_counts.items():
+        print(f"{group:<5} ({data['label']}) : {data['count']}")
 
 def main():
     log_path = os.path.join("samples", "sample_logs.txt")
@@ -40,7 +48,7 @@ def main():
     for line in logs[:5]:
         print(line.strip())
 
-    # Analyze log levels
+    # Analyze HTTP status codes
     analyze_logs(logs)
 
 if __name__ == "__main__":
