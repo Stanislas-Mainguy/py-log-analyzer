@@ -18,17 +18,6 @@ Ce projet est conçu pour :
 
 ---
 
-## 🗂️ Structure du projet
-
-py-log-analyser/
-├── main.py # Script principal
-├── samples/
-│ └── sample_logs.txt # Exemple de fichier de logs
-├── README.md # Version anglaise
-├── README.fr.md # Version française
-
----
-
 ## 🛠️ Technologies utilisées
 
 - 🐍 Python 3.x
